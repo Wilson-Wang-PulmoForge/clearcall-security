@@ -10,17 +10,20 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
-import { Route as AnalyzeRouteImport } from './routes/analyze'
+import { Route as CheckRouteImport } from './routes/check'
 import { Route as LookupRouteImport } from './routes/lookup'
+import { Route as SettingsRouteImport } from './routes/settings'
+import { Route as CallsIndexRouteImport } from './routes/calls.index'
+import { Route as CallsCallIdRouteImport } from './routes/calls.$callId'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const AnalyzeRoute = AnalyzeRouteImport.update({
-  id: '/analyze',
-  path: '/analyze',
+const CheckRoute = CheckRouteImport.update({
+  id: '/check',
+  path: '/check',
   getParentRoute: () => rootRouteImport,
 } as any)
 const LookupRoute = LookupRouteImport.update({
@@ -28,35 +31,70 @@ const LookupRoute = LookupRouteImport.update({
   path: '/lookup',
   getParentRoute: () => rootRouteImport,
 } as any)
+const SettingsRoute = SettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CallsIndexRoute = CallsIndexRouteImport.update({
+  id: '/calls/',
+  path: '/calls/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CallsCallIdRoute = CallsCallIdRouteImport.update({
+  id: '/calls/$callId',
+  path: '/calls/$callId',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/analyze': typeof AnalyzeRoute
+  '/check': typeof CheckRoute
   '/lookup': typeof LookupRoute
+  '/settings': typeof SettingsRoute
+  '/calls/$callId': typeof CallsCallIdRoute
+  '/calls/': typeof CallsIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/analyze': typeof AnalyzeRoute
+  '/check': typeof CheckRoute
   '/lookup': typeof LookupRoute
+  '/settings': typeof SettingsRoute
+  '/calls/$callId': typeof CallsCallIdRoute
+  '/calls': typeof CallsIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/analyze': typeof AnalyzeRoute
+  '/check': typeof CheckRoute
   '/lookup': typeof LookupRoute
+  '/settings': typeof SettingsRoute
+  '/calls/$callId': typeof CallsCallIdRoute
+  '/calls/': typeof CallsIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/analyze' | '/lookup'
+  fullPaths:
+    '/' | '/check' | '/lookup' | '/settings' | '/calls/$callId' | '/calls/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/analyze' | '/lookup'
-  id: '__root__' | '/' | '/analyze' | '/lookup'
+  to: '/' | '/check' | '/lookup' | '/settings' | '/calls/$callId' | '/calls'
+  id:
+    | '__root__'
+    | '/'
+    | '/check'
+    | '/lookup'
+    | '/settings'
+    | '/calls/$callId'
+    | '/calls/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  AnalyzeRoute: typeof AnalyzeRoute
+  CheckRoute: typeof CheckRoute
   LookupRoute: typeof LookupRoute
+  SettingsRoute: typeof SettingsRoute
+  CallsCallIdRoute: typeof CallsCallIdRoute
+  CallsIndexRoute: typeof CallsIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -68,11 +106,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/analyze': {
-      id: '/analyze'
-      path: '/analyze'
-      fullPath: '/analyze'
-      preLoaderRoute: typeof AnalyzeRouteImport
+    '/check': {
+      id: '/check'
+      path: '/check'
+      fullPath: '/check'
+      preLoaderRoute: typeof CheckRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/lookup': {
@@ -82,13 +120,37 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LookupRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/settings': {
+      id: '/settings'
+      path: '/settings'
+      fullPath: '/settings'
+      preLoaderRoute: typeof SettingsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/calls/': {
+      id: '/calls/'
+      path: '/calls'
+      fullPath: '/calls/'
+      preLoaderRoute: typeof CallsIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/calls/$callId': {
+      id: '/calls/$callId'
+      path: '/calls/$callId'
+      fullPath: '/calls/$callId'
+      preLoaderRoute: typeof CallsCallIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  AnalyzeRoute: AnalyzeRoute,
+  CheckRoute: CheckRoute,
   LookupRoute: LookupRoute,
+  SettingsRoute: SettingsRoute,
+  CallsCallIdRoute: CallsCallIdRoute,
+  CallsIndexRoute: CallsIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

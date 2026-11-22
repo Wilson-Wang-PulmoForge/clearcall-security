@@ -5,7 +5,7 @@ import { z } from "zod";
 import { analyzeTranscript } from "./analyze.server";
 
 const inputSchema = z.object({
-  transcript: z.string().trim().min(40, "Paste at least a few lines of the call.").max(20000),
+  transcript: z.string().trim().min(40, "Add a little more detail about the call.").max(20000),
 });
 
 export const analyzeCall = createServerFn({ method: "POST" })

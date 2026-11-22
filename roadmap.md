@@ -1,8 +1,13 @@
 # pulmoforge roadmap
 
-- [x] Design system (dark forensic console look)
-- [x] App shell with sidebar navigation
-- [x] Risk overview dashboard with demo data
-- [x] AI call transcript analysis (Lovable AI)
-- [x] Phone number reputation lookup
-- [x] Page titles/descriptions, verify in browser
+- [x] Design system (dark signal look)
+- [x] AI scam analysis of a call (Lovable AI)
+- [ ] Rebuild as Hiya-style consumer mobile app (replace fraud-team dashboard)
+  - [ ] Mobile shell with bottom tabs
+  - [ ] Home: protection status, incoming-call warning demo, recent alerts
+  - [ ] Recents call log + call detail (block / report)
+  - [ ] Number lookup (mobile)
+  - [ ] AI scam check (consumer wording)
+  - [ ] Settings toggles
+  - [ ] Add to home screen support (icon + manifest)
+- [ ] Verify on phone-size screen

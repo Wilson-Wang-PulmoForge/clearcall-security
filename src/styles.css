@@ -72,6 +72,7 @@
   --animate-wave: wave 1.2s ease-in-out infinite;
   --animate-sweep: sweep 2.4s linear infinite;
   --animate-pulse-dot: pulse-dot 1.8s ease-out infinite;
+  --animate-ring-out: ring-out 1.6s ease-out infinite;
 }
 
 :root {
@@ -122,6 +123,9 @@
   --shadow-signal: 0 0 0 1px color-mix(in oklab, var(--primary) 35%, transparent),
     0 12px 40px -12px color-mix(in oklab, var(--primary) 45%, transparent);
   --grid-line: oklch(1 0 0 / 3.5%);
+  --gradient-alert: radial-gradient(120% 70% at 50% 0%, oklch(0.42 0.16 27) 0%, oklch(0.2 0.05 27) 55%, oklch(0.14 0.02 250) 100%);
+  --gradient-safe: radial-gradient(110% 80% at 50% 0%, oklch(0.34 0.07 168) 0%, oklch(0.19 0.02 200) 60%, oklch(0.165 0.012 250) 100%);
+  --gradient-signal: radial-gradient(110% 80% at 50% 0%, oklch(0.36 0.08 76) 0%, oklch(0.2 0.02 250) 65%, oklch(0.165 0.012 250) 100%);
 }
 
 @layer base {
@@ -163,6 +167,22 @@
   color: var(--color-muted-foreground);
 }
 
+@utility bg-alert {
+  background: var(--gradient-alert);
+}
+
+@utility bg-safe {
+  background: var(--gradient-safe);
+}
+
+@utility bg-signal {
+  background: var(--gradient-signal);
+}
+
+@utility pb-safe {
+  padding-bottom: max(env(safe-area-inset-bottom), 0.5rem);
+}
+
 @utility tabular {
   font-variant-numeric: tabular-nums;
 }
@@ -183,6 +203,17 @@
   }
   to {
     transform: translateX(100%);
+  }
+}
+
+@keyframes ring-out {
+  0% {
+    transform: scale(0.85);
+    opacity: 0.7;
+  }
+  100% {
+    transform: scale(1.6);
+    opacity: 0;
   }
 }
 

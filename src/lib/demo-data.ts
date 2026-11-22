@@ -1,148 +1,155 @@
-// Sample data shown on the dashboard and lookup pages (no live call feed is connected yet).
+// Sample calls and number reports shown in the app (no phone call feed is connected yet).
 
-export type ScreenedCall = {
+export type CallerKind = "fraud" | "spam" | "verified" | "contact" | "unknown";
+
+export type PhoneCall = {
   id: string;
-  time: string;
-  caller: string;
-  callerName: string;
-  channel: "Inbound IVR" | "Agent desk" | "Callback";
-  duration: string;
+  number: string; // E.164
+  name: string;
+  kind: CallerKind;
+  /** 0–100 fraud risk. */
   score: number;
-  threat: string;
-  status: "Blocked" | "Escalated" | "In review" | "Cleared";
-  transcript: string;
+  label: string;
+  direction: "incoming" | "missed" | "blocked" | "outgoing";
+  when: string;
+  day: "Today" | "Yesterday" | "Earlier";
+  duration: string | null;
+  location: string;
+  /** What the caller said (screened call or voicemail), when available. */
+  transcript: string | null;
 };
 
-export const recentCalls: ScreenedCall[] = [
+export const recentCalls: PhoneCall[] = [
   {
-    id: "C-48213",
-    time: "16:12",
-    caller: "+1 (312) 555-0187",
-    callerName: "Claims 'IRS agent'",
-    channel: "Inbound IVR",
-    duration: "4:38",
+    id: "c1",
+    number: "+13125550187",
+    name: "Fraud risk",
+    kind: "fraud",
     score: 94,
-    threat: "Government impersonation",
-    status: "Blocked",
+    label: "Government impersonation",
+    direction: "blocked",
+    when: "4:12 PM",
+    day: "Today",
+    duration: null,
+    location: "Chicago, IL",
     transcript:
-      "Caller: This is Officer Daniel Reyes with the IRS criminal investigations unit. There is a warrant in your name for unpaid taxes.\nAgent: I'm calling on behalf of the account holder, can you give me a case number?\nCaller: I don't have time for that. If the balance of $4,800 is not paid today in gift cards, local police will be dispatched within the hour. Do not hang up and do not tell anyone at the bank about this call.",
+      "This is Officer Daniel Reyes with the IRS criminal investigations unit. There is a warrant in your name for unpaid taxes. If the balance of $4,800 is not paid today in gift cards, local police will be dispatched within the hour. Do not hang up and do not tell anyone about this call.",
   },
   {
-    id: "C-48207",
-    time: "16:04",
-    caller: "+1 (646) 555-0142",
-    callerName: "'Son' requesting wire",
-    channel: "Agent desk",
-    duration: "6:02",
+    id: "c2",
+    number: "+16465550142",
+    name: "\"Michael\"",
+    kind: "fraud",
     score: 88,
-    threat: "Voice clone / family emergency",
-    status: "Escalated",
+    label: "Possible voice clone",
+    direction: "missed",
+    when: "3:40 PM",
+    day: "Today",
+    duration: null,
+    location: "New York, NY",
     transcript:
-      "Caller: Hi, it's Michael, I'm calling for my mom Linda Park, she's on the account. I was in a car accident and I need $9,000 wired for bail right now.\nAgent: I can't move funds without the account holder verifying. Can Linda come on the line?\nCaller: She's too upset to talk. Please, just use the security answers, her mother's maiden name is Cho. I'll lose my lawyer if this isn't done in 20 minutes.",
+      "Mom, it's me, Michael. I was in a car accident and I'm at the police station. I need $9,000 for bail right now, please don't tell Dad. A lawyer is going to call you, just do what he says. Please hurry, I only have a few minutes.",
   },
   {
-    id: "C-48199",
-    time: "15:51",
-    caller: "+1 (415) 555-0119",
-    callerName: "Vendor bank change",
-    channel: "Callback",
-    duration: "3:17",
-    score: 72,
-    threat: "Business email compromise",
-    status: "In review",
-    transcript:
-      "Caller: Hello, this is Priya from Northgate Supply accounts receivable. We've moved banks, so the invoice due Friday needs to go to our new account ending 7731.\nAgent: We'll need that change on letterhead through the vendor portal.\nCaller: The portal is down this week, that's why I'm calling. Our CFO asked that it be handled today, it's quite urgent.",
+    id: "c3",
+    number: "+18005550111",
+    name: "First Harbor Bank",
+    kind: "verified",
+    score: 6,
+    label: "Verified business",
+    direction: "incoming",
+    when: "1:05 PM",
+    day: "Today",
+    duration: "3:12",
+    location: "Toll-free",
+    transcript: null,
   },
   {
-    id: "C-48188",
-    time: "15:33",
-    caller: "+44 20 7946 0958",
-    callerName: "'Fraud dept' callback",
-    channel: "Inbound IVR",
-    duration: "2:44",
-    score: 81,
-    threat: "Bank impersonation",
-    status: "Blocked",
-    transcript:
-      "Caller: Good afternoon, this is the fraud department of your bank. We've detected suspicious activity on your card. To secure it, please read me the six-digit code we just sent to your phone.\nCustomer: Why do you need the code if you're the bank?\nCaller: It's only to verify you. Please hurry, the transaction is processing.",
-  },
-  {
-    id: "C-48172",
-    time: "15:10",
-    caller: "+1 (206) 555-0164",
-    callerName: "Account holder",
-    channel: "Agent desk",
-    duration: "5:21",
-    score: 18,
-    threat: "None detected",
-    status: "Cleared",
-    transcript:
-      "Customer: Hi, I'd like to dispute a charge on my credit card from last Tuesday, it's a duplicate charge from a hotel.\nAgent: I can help with that. Can you verify the last four digits of the card and your billing ZIP?\nCustomer: Sure, it's 4421 and 98103.\nAgent: Thank you. I see two identical charges of $212. I'll open a dispute and you'll get a letter within 10 days.",
-  },
-  {
-    id: "C-48161",
-    time: "14:56",
-    caller: "+1 (702) 555-0133",
-    callerName: "Tech support refund",
-    channel: "Inbound IVR",
-    duration: "7:45",
+    id: "c4",
+    number: "+17025550133",
+    name: "Spam risk",
+    kind: "spam",
     score: 63,
-    threat: "Refund / tech support scam",
-    status: "In review",
+    label: "Tech support / refund",
+    direction: "missed",
+    when: "11:48 AM",
+    day: "Today",
+    duration: null,
+    location: "Las Vegas, NV",
     transcript:
-      "Caller: I'm calling from your computer security provider. We accidentally refunded you $1,500 instead of $150, so you need to send back the difference.\nCustomer: I didn't see any refund.\nCaller: Let me connect to your computer to show you. Please install the app I'm sending and log into your online banking.",
+      "Hello, I'm calling from your computer security provider. We accidentally refunded you $1,500 instead of $150, so you need to send back the difference. Please call us back and install the app we send you so we can fix your account.",
   },
   {
-    id: "C-48150",
-    time: "14:31",
-    caller: "+1 (512) 555-0198",
-    callerName: "Account holder",
-    channel: "Callback",
-    duration: "2:09",
-    score: 9,
-    threat: "None detected",
-    status: "Cleared",
+    id: "c5",
+    number: "+12065550164",
+    name: "Alex Rivera",
+    kind: "contact",
+    score: 3,
+    label: "Contact",
+    direction: "outgoing",
+    when: "9:20 AM",
+    day: "Today",
+    duration: "12:47",
+    location: "Seattle, WA",
+    transcript: null,
+  },
+  {
+    id: "c6",
+    number: "+442079460958",
+    name: "Fraud risk",
+    kind: "fraud",
+    score: 81,
+    label: "Bank impersonation",
+    direction: "blocked",
+    when: "6:31 PM",
+    day: "Yesterday",
+    duration: null,
+    location: "London, UK",
     transcript:
-      "Agent: Hi, this is a callback from the branch about your mortgage appointment.\nCustomer: Yes, thanks for calling back. Can we move it to Thursday at 10?\nAgent: Thursday at 10 works. You'll get a confirmation in the app.",
+      "Good afternoon, this is the fraud department of your bank. We've detected suspicious activity on your card. To secure it, please read me the six-digit code we just sent to your phone. Please hurry, the transaction is processing.",
+  },
+  {
+    id: "c7",
+    number: "+14155550119",
+    name: "Spam risk",
+    kind: "spam",
+    score: 52,
+    label: "Car warranty",
+    direction: "missed",
+    when: "2:15 PM",
+    day: "Yesterday",
+    duration: null,
+    location: "San Francisco, CA",
+    transcript:
+      "We've been trying to reach you about your car's extended warranty. This is your final courtesy call before your coverage expires. Press 1 to speak with a warranty specialist now.",
+  },
+  {
+    id: "c8",
+    number: "+15125550198",
+    name: "Unknown caller",
+    kind: "unknown",
+    score: 22,
+    label: "No reports",
+    direction: "incoming",
+    when: "Mon",
+    day: "Earlier",
+    duration: "0:48",
+    location: "Austin, TX",
+    transcript: null,
   },
 ];
 
-export const hourlyTrend = [
-  { hour: "00", screened: 120, flagged: 6 },
-  { hour: "02", screened: 84, flagged: 5 },
-  { hour: "04", screened: 61, flagged: 7 },
-  { hour: "06", screened: 190, flagged: 9 },
-  { hour: "08", screened: 640, flagged: 22 },
-  { hour: "10", screened: 980, flagged: 31 },
-  { hour: "12", screened: 1120, flagged: 38 },
-  { hour: "14", screened: 1040, flagged: 44 },
-  { hour: "16", screened: 910, flagged: 41 },
-  { hour: "18", screened: 620, flagged: 27 },
-  { hour: "20", screened: 410, flagged: 19 },
-  { hour: "22", screened: 230, flagged: 12 },
-];
-
-export const threatMix = [
-  { type: "Bank impersonation", share: 31 },
-  { type: "Voice clone / family emergency", share: 22 },
-  { type: "Government impersonation", share: 17 },
-  { type: "Business email compromise", share: 14 },
-  { type: "Refund / tech support", share: 11 },
-  { type: "Other", share: 5 },
-];
-
-export const kpis = {
-  screened: 6405,
-  flagged: 261,
-  blockedValue: 482300,
-  avgTrust: 91.4,
+export const weeklyStats = {
+  screened: 37,
+  blocked: 12,
+  fraudStopped: 4,
 };
 
 export type NumberReport = {
   number: string;
   trust: number;
   category: string;
-  lineType: "Mobile" | "Landline" | "VoIP";
+  lineType: "Mobile" | "Landline" | "VoIP" | "Toll-free";
   carrier: string;
   region: string;
   reports: number;
@@ -160,12 +167,12 @@ export const reputationList: NumberReport[] = [
     carrier: "Spoofed / unknown VoIP",
     region: "Chicago, IL (spoofed)",
     reports: 412,
-    firstSeen: "2026-09-03",
-    lastSeen: "2026-11-22",
+    firstSeen: "Sep 3, 2026",
+    lastSeen: "Today",
     notes: [
-      "Demands gift card payment for 'unpaid taxes'",
-      "Caller ID rotates across Chicago area codes",
-      "Linked to 3 blocked IVR sessions today",
+      "Claims to be the IRS and threatens arrest",
+      "Demands payment in gift cards",
+      "Caller ID rotates across Chicago numbers",
     ],
   },
   {
@@ -173,47 +180,66 @@ export const reputationList: NumberReport[] = [
     trust: 11,
     category: "Bank impersonation",
     lineType: "VoIP",
-    carrier: "Offshore SIP trunk",
+    carrier: "Offshore internet line",
     region: "London, UK",
     reports: 188,
-    firstSeen: "2026-10-14",
-    lastSeen: "2026-11-22",
-    notes: ["Requests one-time passcodes", "Claims to be 'fraud department'"],
+    firstSeen: "Oct 14, 2026",
+    lastSeen: "Yesterday",
+    notes: ["Asks for the one-time code sent to your phone", "Pretends to be your bank's fraud team"],
   },
   {
     number: "+16465550142",
     trust: 23,
-    category: "Voice clone / family emergency",
+    category: "Possible voice clone",
     lineType: "Mobile",
-    carrier: "Prepaid MVNO",
+    carrier: "Prepaid carrier",
     region: "New York, NY",
     reports: 37,
-    firstSeen: "2026-11-02",
-    lastSeen: "2026-11-22",
-    notes: ["Voice matches synthetic profile VX-219", "Targets elderly account holders"],
+    firstSeen: "Nov 2, 2026",
+    lastSeen: "Today",
+    notes: [
+      "Voice matches a known AI-generated voice pattern",
+      "Pretends to be a family member in trouble",
+    ],
   },
   {
     number: "+17025550133",
     trust: 38,
-    category: "Refund / tech support",
+    category: "Tech support / refund",
     lineType: "VoIP",
-    carrier: "Hosted PBX reseller",
+    carrier: "Internet phone reseller",
     region: "Las Vegas, NV",
     reports: 54,
-    firstSeen: "2026-08-21",
-    lastSeen: "2026-11-21",
-    notes: ["Asks customers to install remote-access apps"],
+    firstSeen: "Aug 21, 2026",
+    lastSeen: "Today",
+    notes: ["Asks people to install remote-access apps"],
   },
   {
-    number: "+12065550164",
-    trust: 96,
-    category: "Verified customer",
-    lineType: "Mobile",
-    carrier: "Major US carrier",
-    region: "Seattle, WA",
+    number: "+14155550119",
+    trust: 48,
+    category: "Car warranty",
+    lineType: "VoIP",
+    carrier: "Robocall platform",
+    region: "San Francisco, CA",
+    reports: 1290,
+    firstSeen: "Jan 9, 2026",
+    lastSeen: "Yesterday",
+    notes: ["Pre-recorded robocall", "Not affiliated with any car maker"],
+  },
+  {
+    number: "+18005550111",
+    trust: 97,
+    category: "Verified business · First Harbor Bank",
+    lineType: "Toll-free",
+    carrier: "Registered business line",
+    region: "United States",
     reports: 0,
-    firstSeen: "2019-04-11",
-    lastSeen: "2026-11-22",
-    notes: ["Matches account holder on file", "Passed voiceprint check 14 times"],
+    firstSeen: "Mar 2, 2018",
+    lastSeen: "Today",
+    notes: ["Business identity verified", "Calls are signed by the carrier (no spoofing)"],
   },
 ];
+
+export function findReport(number: string) {
+  return reputationList.find((r) => r.number === number);
+}
