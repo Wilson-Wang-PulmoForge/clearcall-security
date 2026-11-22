@@ -28,3 +28,9 @@ use the editor.
   own key and store it in Secrets.
 - **Secrets.** Lovable manages them. Do not put secret values in the repo.
 <!-- LOVABLE:END -->
+
+## Project rules
+
+- AI calls live in `src/lib/*.server.ts` and are exposed through `src/lib/*.functions.ts` server functions; keeps the Lovable AI key and prompts off the browser.
+- Demo/sample data lives in `src/lib/demo-data.ts` until a real call feed or number intelligence source is connected; one place to swap in live data.
+- The app shell (sidebar nav) wraps `<Outlet />` in `src/routes/__root.tsx`; every page renders inside it.
